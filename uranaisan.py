@@ -12,14 +12,14 @@ def chat(text, **kw):  #チャット用の関数（ここを書き換える）
   return 'ほ' * n
 
 # アイコンの指定
-BOT_ICON = 'https://4.bp.blogspot.com/-7LcdiJjflkE/XASwYu6DyuI/AAAAAAABQZs/K0EQCKmvDmsVbEES7sAb6_xJhJyQXXLFgCLcBGAs/s800/bluebird_robot_bot.png'
+BOT_ICON = 'https://3.bp.blogspot.com/-qbORCFE5qhk/UmTBJwEYKjI/AAAAAAAAZYY/nbjieynFcLQ/s800/job_uranaishi.png'
 YOUR_ICON = 'https://2.bp.blogspot.com/-WplygmIuX28/VZ-PPsDMOmI/AAAAAAAAvDU/OKG7taU7wXo/s800/girl_think.png'
 
 def run_chat(chat = chat, start='占いするよ', **kw):
 
   def display_bot(bot_text):
     with output.redirect_to_element('#output'):
-      bot_name = kw.get('bot_name', 'ボット')
+      bot_name = kw.get('bot_name', '占い師')
       bot_icon = kw.get('bot_icon', BOT_ICON)
       display(IPython.display.HTML(f'''
       <div class="sb-box">
