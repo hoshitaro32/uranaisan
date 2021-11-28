@@ -15,7 +15,7 @@ def chat(text, **kw):  #チャット用の関数（ここを書き換える）
 BOT_ICON = 'https://3.bp.blogspot.com/-qbORCFE5qhk/UmTBJwEYKjI/AAAAAAAAZYY/nbjieynFcLQ/s800/job_uranaishi.png'
 YOUR_ICON = 'https://2.bp.blogspot.com/-WplygmIuX28/VZ-PPsDMOmI/AAAAAAAAvDU/OKG7taU7wXo/s800/girl_think.png'
 
-def run_chat(chat = chat, start='占いするよ', **kw):
+def run_chat(chat = chat, start='気になる人との相性を占います', **kw):
 
   def display_bot(bot_text):
     with output.redirect_to_element('#output'):
