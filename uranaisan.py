@@ -1,6 +1,7 @@
 import time
 import random
 import IPython
+import re
 from google.colab import output
 
 
@@ -235,30 +236,103 @@ def run_chat(chat = chat, start='占いするよ', **kw):
   if start is not None:
     display_bot(start)
 
+def soulnumber(s):
+    while len(s) > 3:
+      s = str(sum(int(x) for x in s))
+    if s[0] == s[1]:
+      return s
+    else:
+      s = str(sum(int(x) for x in s))
+      return s
+
+
+def pattern(m):
+  pattern1 = r'\d\d\d\d\d\d\d\d'
+  pattern1 = re.compile(pattern1)
+  pattern2 = r'(\d\d\d\d)年(\d\d?)月(\d\d?)日'
+  pattern2 = re.compile(pattern2)
+  pattern3 = r'(\d\d\d\d)\\(\d\d?)\\(\d\d?)'
+  pattern3 = re.compile(pattern3)
+  pattern4 = r'(\d\d\d\d)-(\d\d?)-(\d\d?)'
+  pattern4 = re.compile(pattern4)
+  s1 = pattern1.findall(m)
+  if len(s1) == 0:
+    s1 = pattern2.findall(m)
+  if len(s1) == 0:
+    s1 = pattern3.findall(m)
+  if len(s1) == 0:
+    s1 = pattern4.findall(m)
+  s2 = s1[0]
+  s3 = list(s2)
+  n = ''.join(s3)
+  return n
+
+def patternYN(s):
+  patternA = r'\D+(はい)'
+  patternA = re.compile(patternA)
+  patternB = r'\D+(いいえ)'
+  patternB = re.compile(patternB)
+  s1 = patternA.findall(s)
+  if len(s1) == 0:
+    s1 = patternB.findall(s)
+  s2 = s1[0]
+  s3 = list(s2)
+  n = ''.join(s3)
+  return n    
+
 frame = {}
 
-def uranai(input_text):
-  global frame # 外部の状態を参照する
-  if 'asking' in frame:  # asking から更新する
+def uranaisan(input_text):
+  global frame #外部の状態を参照する
+  if 'asking' in frame: #askingから更新する
     frame[frame['asking']] = input_text
-    del frame['asking']
 
   if 'name' not in frame:
-    frame['asking'] = 'name' # 名前をたずねる  
+    frame['asking'] = 'name' #名前を尋ねる
     return 'あなたの名前は？'
 
-  if 'name' in frame and 'birthday' not in frame:
-    frame['asking'] = 'birthday' # 誕生日をたずねる    
-    return 'あなたの誕生日は？'
+  if 'name' in frame and 'Xbirthday' not in frame:
+    frame['asking'] = 'Xbirthday'
+    a = frame['name']
+    return f'{a}さんの生年月日は？'
+  
+  if 'name' in frame and 'Xbirthday' in frame and 'Yname' not in frame and 'onemore' not in frame:
+    frame['asking'] = 'Yname'
+    return '気になる人の名前は？'
 
-  if 'name' in frame and 'birthday' in frame:
-    # 占います
-    number = hash(frame['name']+frame['birthday']) % 10
-    if number > 5:
-      return 'あなたの運勢は大吉'
-    return 'あなたの運勢は吉'
+  if 'name' in frame and 'Xbirthday' in frame and 'Yname' in frame and 'Ybirthday' not in frame and 'onemore' not in frame:
+    frame['asking'] = 'Ybirthday'
+    b = frame['Yname']
+    return f'{b}さんの生年月日は？'
+
+  if 'name' in frame and 'Xbirthday' in frame and 'Yname' not in frame and 'Ybirthday' not in frame and 'onemore' in frame:
+      del frame['onemore']
+      frame['asking'] = 'Yname'
+      return 'あなたとの相性を占いたい人の名前は？'
+
+
+  if 'name' in frame and 'Xbirthday' in frame and 'Yname' in frame and 'Ybirthday' in frame and 'onemore' not in frame:
+    #占います
+    x = int(soulnumber(pattern(frame['Xbirthday'])))
+    y = int(soulnumber(pattern(frame['Ybirthday'])))
+    if abs(x - y) >= 5:
+      frame['asking'] = 'onemore'
+      return 'ごめんなさい、相性は良くないようです・・・。他の人との相性を占ってみませんか？(はい or いいえ)'
+    elif abs(x - y) == 0:
+      return '相性抜群です！その人とうまくやっていけそうです！！　占い終了です。ありがとうございました！'
+    else:
+      return '相性は良いです！その人とうまくやっていけそうですね！　占い終了です。ありがとうございました！' 
+  
+  if 'name' in frame and 'Xbirthday' in frame and 'Yname' in frame and 'Ybirthday' in frame and 'onemore' in frame:
+    c = patternYN(frame['onemore'])
+    if c == 'はい':
+      del frame['Ybirthday']
+      del frame['Yname']
+      return '他の人との相性を占います'
+    else:
+      return '占い終了です。ありがとうございました！'
 
   return output_text
 
 def start():
-  run_chat(chat=uranai) 
+  run_chat(chat=uranaisan) 
