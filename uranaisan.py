@@ -239,7 +239,7 @@ def run_chat(chat = chat, start='気になる人との相性を占います', **
 def soulnumber(s):
     while len(s) > 3:
       s = str(sum(int(x) for x in s))
-    if lne(s) == 2 and s[0] == s[1]:
+    if le(s) == 2 and s[0] == s[1]:
       return s
     else:
       s = str(sum(int(x) for x in s))
