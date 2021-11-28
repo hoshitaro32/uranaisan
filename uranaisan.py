@@ -239,7 +239,7 @@ def run_chat(chat = chat, start='気になる人との相性を占います', **
 def soulnumber(s):
     while len(s) > 3:
       s = str(sum(int(x) for x in s))
-    if le(s) == 2 and s[0] == s[1]:
+    if len(s) == 2 and s[0] == s[1]:
       return s
     else:
       s = str(sum(int(x) for x in s))
@@ -247,7 +247,7 @@ def soulnumber(s):
 
 
 def pattern(m):
-  pattern1 = r'\d\d\d\d\d\d\d\d'
+  pattern1 = r'(\d\d\d\d\d\d\d\d)'
   pattern1 = re.compile(pattern1)
   pattern2 = r'(\d\d\d\d)年(\d\d?)月(\d\d?)日'
   pattern2 = re.compile(pattern2)
